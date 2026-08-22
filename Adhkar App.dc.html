@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-c1b3a172-d195-4f18-ba51-dd4d57e8686b/styles.css">
+<script src="_ds/organic-c1b3a172-d195-4f18-ba51-dd4d57e8686b/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:var(--color-bg)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-600)}
+@keyframes flash{from{opacity:1}to{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:24px;padding:40px 20px 64px;font-family:var(--font-body);color:var(--color-text)">
+
+  <div style="display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center;max-width:560px">
+    <div style="font-family:var(--font-heading);font-size:32px;line-height:1.1">Adhkār — morning &amp; evening</div>
+    <div style="font-size:14.5px;line-height:1.55;color:var(--color-neutral-700)">A tap-to-count card stack, a standalone tasbeeh, and a full history. The phone below is live — tap through it.</div>
+  </div>
+
+  <div style="display:flex;gap:6px;background:var(--color-neutral-100);border:1px solid var(--color-neutral-300);border-radius:999px;padding:5px">
+    <button onClick="{{ setLayoutA }}" style="border-radius:999px;padding:9px 18px;font-size:13px;font-weight:600;background:{{ tabA.bg }};color:{{ tabA.fg }}">Reader A · card</button>
+    <button onClick="{{ setLayoutB }}" style="border-radius:999px;padding:9px 18px;font-size:13px;font-weight:600;background:{{ tabB.bg }};color:{{ tabB.fg }}">Reader B · full-bleed</button>
+    <div style="width:1px;background:var(--color-neutral-300);margin:4px 4px"></div>
+    <button onClick="{{ toggleMode }}" style="border-radius:999px;padding:9px 18px;font-size:13px;font-weight:600;color:var(--color-neutral-700)">{{ modeSwitchLabel }}</button>
+  </div>
+
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:{{ bg }};color:{{ fg }};--sc-tint:{{ tint }};--sc-line:{{ line }};padding-top:54px;font-family:var(--font-body);overflow:hidden">
+
+      <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;overflow:auto;padding:8px 20px 4px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:3px;padding-top:6px">
+            <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;font-weight:600">{{ dateLine }}</div>
+            <div style="font-family:var(--font-heading);font-size:29px;line-height:1.15">{{ greeting }}</div>
+          </div>
+
+          <button onClick="{{ openPrimary }}" style="text-align:left;border-radius:var(--radius-lg);padding:22px;background:{{ accent }};color:{{ onAccent }};box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:18px" style-active="transform:scale(.99)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;font-weight:600">{{ primaryKicker }}</div>
+                <div style="font-family:var(--font-heading);font-size:26px;line-height:1.1">{{ primaryTitle }}</div>
+                <div style="font-size:13.5px;opacity:.8">{{ primarySub }}</div>
+              </div>
+              <div style="font-family:'Noto Naskh Arabic',var(--font-body);font-size:27px;opacity:.85;direction:rtl;white-space:nowrap">{{ primaryArabicName }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="flex:1;height:6px;border-radius:999px;background:var(--color-accent-200);overflow:hidden">
+                <div style="height:100%;border-radius:999px;background:var(--color-accent-100);width:{{ primaryPct }}"></div>
+              </div>
+              <div style="font-size:12.5px;font-weight:600;opacity:.9">{{ primaryCount }}</div>
+            </div>
+            <div style="align-self:flex-start;border-radius:999px;background:var(--color-accent-100);color:var(--color-accent-700);padding:10px 20px;font-size:14px;font-weight:600">{{ primaryCta }}</div>
+          </button>
+
+          <button onClick="{{ openSecondary }}" style="text-align:left;border-radius:var(--radius-md);padding:18px;border:1px solid var(--sc-line);display:flex;align-items:center;justify-content:space-between;gap:14px" style-active="background:var(--sc-tint)">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.5;font-weight:600">{{ secondaryKicker }}</div>
+              <div style="font-family:var(--font-heading);font-size:19px">{{ secondaryTitle }}</div>
+              <div style="font-size:13px;opacity:.6">{{ secondarySub }}</div>
+            </div>
+            <div style="font-family:'Noto Naskh Arabic',var(--font-body);font-size:23px;opacity:.55;direction:rtl">{{ secondaryArabicName }}</div>
+          </button>
+
+          <div style="display:flex;gap:12px">
+            <div style="flex:1;border-radius:var(--radius-md);padding:16px;background:var(--sc-tint);display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:var(--font-heading);font-size:30px;line-height:1;color:{{ accent }}">{{ streak }}</div>
+              <div style="font-size:12.5px;opacity:.6">day streak</div>
+            </div>
+            <div style="flex:1;border-radius:var(--radius-md);padding:16px;background:var(--sc-tint);display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:var(--font-heading);font-size:30px;line-height:1;color:{{ sage }}">{{ weekDone }}</div>
+              <div style="font-size:12.5px;opacity:.6">of 14 this week</div>
+            </div>
+          </div>
+
+          <div style="border-radius:var(--radius-md);padding:16px 18px;border:1px dashed var(--sc-line);display:flex;flex-direction:column;gap:5px">
+            <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.5;font-weight:600">Reminder</div>
+            <div style="font-size:14px;line-height:1.5;opacity:.8">{{ reminderLine }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isTasbeeh }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;padding:14px 20px 0;gap:16px">
+          <div style="font-family:var(--font-heading);font-size:26px">Tasbeeh</div>
+          <div style="display:flex;gap:7px">
+            <button onClick="{{ setT33 }}" style="flex:1;border-radius:999px;padding:9px 0;font-size:13px;font-weight:600;background:{{ t33.bg }};color:{{ t33.fg }};border:1px solid var(--sc-line)">33</button>
+            <button onClick="{{ setT99 }}" style="flex:1;border-radius:999px;padding:9px 0;font-size:13px;font-weight:600;background:{{ t99.bg }};color:{{ t99.fg }};border:1px solid var(--sc-line)">99</button>
+            <button onClick="{{ setT100 }}" style="flex:1;border-radius:999px;padding:9px 0;font-size:13px;font-weight:600;background:{{ t100.bg }};color:{{ t100.fg }};border:1px solid var(--sc-line)">100</button>
+            <button onClick="{{ setTFree }}" style="flex:1;border-radius:999px;padding:9px 0;font-size:13px;font-weight:600;background:{{ tFree.bg }};color:{{ tFree.fg }};border:1px solid var(--sc-line)">Free</button>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
+            <button onClick="{{ tapTasbeeh }}" style="position:relative;width:236px;height:236px;border-radius:999px;background:var(--sc-tint);display:flex;align-items:center;justify-content:center" style-active="transform:scale(.985)">
+              <svg width="236" height="236" viewBox="0 0 236 236" style="position:absolute;inset:0;transform:rotate(-90deg)">
+                <circle cx="118" cy="118" r="110" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="6"></circle>
+                <circle cx="118" cy="118" r="110" fill="none" stroke="{{ accent }}" stroke-width="6" stroke-linecap="round" stroke-dasharray="691.1" stroke-dashoffset="{{ tasbeehOffset }}"></circle>
+              </svg>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="font-family:var(--font-heading);font-size:64px;line-height:1;font-variant-numeric:tabular-nums">{{ tasbeeh }}</div>
+                <div style="font-size:12.5px;opacity:.55">{{ tasbeehTargetLabel }}</div>
+              </div>
+            </button>
+            <div style="font-family:'Noto Naskh Arabic',var(--font-body);font-size:26px;direction:rtl;opacity:.8">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button onClick="{{ resetTasbeeh }}" style="border-radius:999px;padding:9px 18px;font-size:13px;font-weight:600;border:1px solid var(--sc-line)">Reset</button>
+              <div style="font-size:13px;opacity:.55">{{ tasbeehSets }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;overflow:auto;padding:14px 20px 4px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-family:var(--font-heading);font-size:26px">Progress</div>
+
+          <div style="border-radius:var(--radius-lg);padding:20px;background:{{ accent }};color:{{ onAccent }};display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:var(--font-heading);font-size:46px;line-height:1">{{ streak }}</div>
+              <div style="font-size:13px;opacity:.85">days unbroken</div>
+            </div>
+            <div style="text-align:right;font-size:12.5px;line-height:1.7;opacity:.85">
+              <div>Longest · {{ longest }} days</div>
+              <div>Started · {{ startedOn }}</div>
+            </div>
+          </div>
+
+          <div style="border-radius:var(--radius-md);padding:18px;background:var(--sc-tint);display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <div style="font-size:14px;font-weight:600">Last 10 weeks</div>
+              <div style="font-size:11.5px;opacity:.5">both sessions = full</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(10,1fr);grid-auto-rows:1fr;gap:5px">
+              <sc-for list="{{ heat }}" as="cell" hint-placeholder-count="70">
+                <div style="aspect-ratio:1;border-radius:6px;background:{{ cell.bg }}"></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="border-radius:var(--radius-md);padding:18px;background:var(--sc-tint);display:flex;flex-direction:column;gap:14px">
+            <div style="font-size:14px;font-weight:600">Morning vs evening</div>
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;opacity:.7"><span>Morning</span><span>{{ morningPct }}</span></div>
+                <div style="height:8px;border-radius:999px;background:var(--sc-line)"><div style="height:100%;border-radius:999px;background:{{ accent }};width:{{ morningPct }}"></div></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;opacity:.7"><span>Evening</span><span>{{ eveningPct }}</span></div>
+                <div style="height:8px;border-radius:999px;background:var(--sc-line)"><div style="height:100%;border-radius:999px;background:{{ sage }};width:{{ eveningPct }}"></div></div>
+              </div>
+            </div>
+            <div style="font-size:12.5px;line-height:1.5;opacity:.6">{{ splitNote }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;overflow:auto;padding:14px 20px 4px;display:flex;flex-direction:column;gap:18px">
+          <div style="font-family:var(--font-heading);font-size:26px">Settings</div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.5;font-weight:600">Reading</div>
+            <div style="border-radius:var(--radius-md);background:var(--sc-tint);padding:4px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--sc-line)">
+                <div style="font-size:14.5px">Show translation</div>
+                <button onClick="{{ toggleTranslation }}" style="width:46px;height:28px;border-radius:999px;padding:3px;display:flex;background:{{ swTrans.bg }}">
+                  <div style="width:22px;height:22px;border-radius:999px;background:#fff;transform:{{ swTrans.knob }};transition:transform .18s ease"></div>
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px">
+                <div style="font-size:14.5px">Arabic size</div>
+                <div style="display:flex;gap:5px">
+                  <button onClick="{{ setSizeS }}" style="border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;background:{{ sizeS.bg }};color:{{ sizeS.fg }}">S</button>
+                  <button onClick="{{ setSizeM }}" style="border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;background:{{ sizeM.bg }};color:{{ sizeM.fg }}">M</button>
+                  <button onClick="{{ setSizeL }}" style="border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;background:{{ sizeL.bg }};color:{{ sizeL.fg }}">L</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.5;font-weight:600">Reminders</div>
+            <div style="border-radius:var(--radius-md);background:var(--sc-tint);padding:4px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--sc-line)">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:14.5px">Daily nudges</div>
+                  <div style="font-size:12.5px;opacity:.55">One after Fajr, one after ʿAsr</div>
+                </div>
+                <button onClick="{{ toggleReminders }}" style="width:46px;height:28px;border-radius:999px;padding:3px;display:flex;background:{{ swRem.bg }}">
+                  <div style="width:22px;height:22px;border-radius:999px;background:#fff;transform:{{ swRem.knob }};transition:transform .18s ease"></div>
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--sc-line)">
+                <div style="font-size:14.5px">Morning</div>
+                <div style="font-size:14.5px;opacity:.55">06:10 · after Fajr</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">
+                <div style="font-size:14.5px">Evening</div>
+                <div style="font-size:14.5px;opacity:.55">17:40 · after ʿAsr</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.5;font-weight:600">Audio</div>
+            <div style="border-radius:var(--radius-md);background:var(--sc-tint);padding:4px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--sc-line)">
+                <div style="font-size:14.5px">Recitation player</div>
+                <button onClick="{{ toggleAudio }}" style="width:46px;height:28px;border-radius:999px;padding:3px;display:flex;background:{{ swAudio.bg }}">
+                  <div style="width:22px;height:22px;border-radius:999px;background:#fff;transform:{{ swAudio.knob }};transition:transform .18s ease"></div>
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">
+                <div style="font-size:14.5px">Reciter</div>
+                <div style="font-size:14.5px;opacity:.55">Mishary al-ʿAfasy</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:12px;line-height:1.6;opacity:.45;padding-bottom:6px">Text compiled from the authentic morning &amp; evening adhkār of Shaykh ʿAbd al-ʿAzīz at-Tarefe.</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ inReader }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;min-height:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 18px 10px">
+            <button onClick="{{ closeReader }}" style="width:38px;height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;border:1px solid var(--sc-line);font-size:17px">×</button>
+            <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;font-weight:600">{{ readerTitle }}</div>
+            <div style="font-size:12.5px;opacity:.5;font-variant-numeric:tabular-nums;min-width:38px;text-align:right">{{ posLabel }}</div>
+          </div>
+
+          <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:0 20px 10px">
+            <sc-for list="{{ beads }}" as="b" hint-placeholder-count="18">
+              <div style="width:6px;height:6px;border-radius:999px;background:{{ b.color }};transform:{{ b.scale }}"></div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isLayoutA }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;min-height:0;display:flex;flex-direction:column;padding:0 16px 12px">
+              <button onClick="{{ tapCard }}" style="flex:1;min-height:0;text-align:left;border-radius:var(--radius-lg);background:{{ cardBg }};border:1px solid var(--sc-line);box-shadow:var(--shadow-md);display:flex;flex-direction:column;overflow:hidden" style-active="transform:scale(.995)">
+                <div style="flex:1;min-height:0;overflow:auto;padding:26px 22px 10px;display:flex;flex-direction:column;justify-content:center">
+                  <div style="direction:rtl;font-family:'Noto Naskh Arabic',var(--font-body);font-weight:500;text-align:center;line-height:2.05;font-size:{{ arabicSize }}">{{ arabic }}</div>
+                  <sc-if value="{{ showTranslation }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;flex-direction:column;align-items:center">
+                      <div style="width:52px;height:1px;background:var(--sc-line);margin:20px 0 16px"></div>
+                      <div style="font-size:14px;line-height:1.65;text-align:center;opacity:.72;max-width:32em">{{ translation }}</div>
+                    </div>
+                  </sc-if>
+                  <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:center;opacity:.42;margin-top:14px">{{ sourceLine }}</div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:24px;padding:6px 0 18px;flex-shrink:0">
+                  <div onClick="{{ prev }}" style="padding:10px 14px;font-size:22px;line-height:1;opacity:.35">‹</div>
+                  <div style="position:relative;width:78px;height:78px">
+                    <svg width="78" height="78" viewBox="0 0 78 78" style="transform:rotate(-90deg)">
+                      <circle cx="39" cy="39" r="34" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width="4"></circle>
+                      <circle cx="39" cy="39" r="34" fill="none" stroke="{{ accent }}" stroke-width="4" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="{{ ringOffset }}"></circle>
+                    </svg>
+                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                      <div style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">{{ count }}</div>
+                      <div style="font-size:10px;opacity:.5">of {{ target }}</div>
+                    </div>
+                  </div>
+                  <div onClick="{{ next }}" style="padding:10px 14px;font-size:22px;line-height:1;opacity:.35">›</div>
+                </div>
+              </button>
+              <div style="text-align:center;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.35;padding:12px 0 22px">Tap the card for each recitation</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isLayoutB }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;min-height:0;display:flex;flex-direction:column;padding:0 24px 12px">
+              <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:center;padding:8px 0">
+                <div style="direction:rtl;font-family:'Noto Naskh Arabic',var(--font-body);font-weight:500;text-align:center;line-height:2.05;font-size:{{ arabicSizeB }}">{{ arabic }}</div>
+                <sc-if value="{{ showTranslation }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="width:52px;height:1px;background:var(--sc-line);margin:22px 0 16px"></div>
+                    <div style="font-size:14px;line-height:1.65;text-align:center;opacity:.7;max-width:32em">{{ translation }}</div>
+                  </div>
+                </sc-if>
+                <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:center;opacity:.4;margin-top:14px">{{ sourceLine }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:18px;padding:8px 0 26px;flex-shrink:0">
+                <button onClick="{{ prev }}" style="width:44px;height:44px;border-radius:999px;font-size:20px;opacity:.4">‹</button>
+                <button onClick="{{ tapCard }}" style="position:relative;width:132px;height:132px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--sc-tint)" style-active="transform:scale(.98)">
+                  <svg width="132" height="132" viewBox="0 0 132 132" style="position:absolute;inset:0;transform:rotate(-90deg)">
+                    <circle cx="66" cy="66" r="60" fill="none" stroke="currentColor" stroke-opacity=".13" stroke-width="7"></circle>
+                    <circle cx="66" cy="66" r="60" fill="none" stroke="{{ accent }}" stroke-width="7" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="{{ ringOffsetB }}"></circle>
+                  </svg>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+                    <div style="font-family:var(--font-heading);font-size:38px;line-height:1;font-variant-numeric:tabular-nums">{{ count }}</div>
+                    <div style="font-size:11px;opacity:.5">of {{ target }}</div>
+                  </div>
+                </button>
+                <button onClick="{{ next }}" style="width:44px;height:44px;border-radius:999px;font-size:20px;opacity:.4">›</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:30px 30px 60px;text-align:center;animation:rise .45s ease-out">
+          <div style="direction:rtl;font-family:'Noto Naskh Arabic',var(--font-body);font-size:34px;line-height:1.9">تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُم</div>
+          <div style="font-size:14.5px;line-height:1.6;opacity:.7;max-width:26em">May Allah accept it from us and from you. {{ doneLine }}</div>
+          <div style="display:flex;align-items:center;gap:12px;border-radius:999px;padding:12px 20px;background:{{ accent }};color:{{ onAccent }}">
+            <div style="font-family:var(--font-heading);font-size:26px;line-height:1">{{ streak }}</div>
+            <div style="font-size:13px;text-align:left;line-height:1.3">day streak<br><span style="opacity:.8">{{ doneStreakNote }}</span></div>
+          </div>
+          <button onClick="{{ closeReader }}" style="border-radius:999px;padding:12px 26px;font-size:13.5px;font-weight:600;border:1px solid var(--sc-line)">Back to today</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+        <div style="flex-shrink:0;display:flex;padding:10px 12px 30px;border-top:1px solid var(--sc-line);background:{{ bg }}">
+          <button onClick="{{ goToday }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0;opacity:{{ nav.today }}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+            <span style="font-size:10.5px;font-weight:600">Today</span>
+          </button>
+          <button onClick="{{ goTasbeeh }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0;opacity:{{ nav.tasbeeh }}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><circle cx="5.5" cy="12" r="2.5"></circle><circle cx="12" cy="12" r="2.5"></circle><circle cx="18.5" cy="12" r="2.5"></circle></svg>
+            <span style="font-size:10.5px;font-weight:600">Tasbeeh</span>
+          </button>
+          <button onClick="{{ goProgress }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0;opacity:{{ nav.progress }}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16M8 17V9M13 17V5M18 17v-3"></path></svg>
+            <span style="font-size:10.5px;font-weight:600">Progress</span>
+          </button>
+          <button onClick="{{ goSettings }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0;opacity:{{ nav.settings }}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H14M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"></path></svg>
+            <span style="font-size:10.5px;font-weight:600">Settings</span>
+          </button>
+        </div>
+      </sc-if>
+
+    </div>
+  </x-import>
+
+  <div style="max-width:560px;font-size:12.5px;line-height:1.65;color:var(--color-neutral-600);text-align:center">Next: Android frame, an onboarding pass for new Muslims, and swapping in the at-Tarefe text once it is readable.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;readerLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Card&quot;,&quot;Full-bleed&quot;],&quot;default&quot;:&quot;Card&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Reader&quot;},&quot;timeOfDay&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Auto&quot;,&quot;Morning&quot;,&quot;Evening&quot;],&quot;default&quot;:&quot;Auto&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Reader&quot;},&quot;showTranslation&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Reader&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#c67139&quot;,&quot;#7a8a5e&quot;,&quot;#8c491a&quot;],&quot;default&quot;:&quot;#c67139&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+const DATA = [
+  {a:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", t:"O Allah, You are my Lord, none has the right to be worshipped but You. You created me and I am Your servant; I keep Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your favour upon me and I confess my sin, so forgive me, for none forgives sins but You.", n:1, s:"Sahih al-Bukhari 6306", g:"Sahih", w:"b", long:true},
+  {a:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", t:"None has the right to be worshipped but Allah alone, with no partner. His is the dominion and His is the praise, and He is over all things competent.", n:10, s:"Sahih al-Bukhari 6403 (also 3293)", g:"Sahih", w:"b"},
+  {a:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", t:"Glory is to Allah and praise is to Him.", n:100, s:"Sahih al-Bukhari 6405", g:"Sahih", w:"b"},
+  {a:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", t:"In the Name of Allah, with whose Name nothing on earth or in heaven can cause harm, and He is the All-Hearing, the All-Knowing.", n:3, s:"Sunan al-Tirmidhi 3388 (also Abu Dawud 5088", g:"Hasan Sahih", w:"b"},
+  {a:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي", t:"O Allah, I ask You for pardon and well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion, my worldly affairs, my family and my wealth. O Allah, conceal my faults and calm my fears. O Allah, guard me from before me, behind me, my right, my left and above me, and I seek refuge in Your greatness from being struck down from beneath me.", n:1, s:"Sunan Abi Dawud 5074 (also Ibn Majah 3871)", g:"Sahih (al-Albani)", w:"b", long:true},
+  {a:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ", t:"Say: He is Allah, One. Allah, the Eternal Refuge. He neither begets nor is born, and there is none comparable to Him. (Surah 112)", n:3, s:"Sunan Abi Dawud 5082", g:"Hasan Sahih", w:"b"},
+  {a:"قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ", t:"Say: I seek refuge in the Lord of the daybreak, from the evil of what He created, from the evil of darkness when it settles, from the evil of those who blow on knots, and from the evil of an envier when he envies. (Surah 113)", n:3, s:"Sunan Abi Dawud 5082", g:"Hasan Sahih", w:"b"},
+  {a:"قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ", t:"Say: I seek refuge in the Lord of humankind, the Sovereign of humankind, the God of humankind, from the evil of the retreating whisperer who whispers in the breasts of humankind, from among jinn and humankind. (Surah 114)", n:3, s:"Sunan Abi Dawud 5082", g:"Hasan Sahih", w:"b"},
+  {a:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا", t:"I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad (SAW) as my Prophet.", n:3, s:"Musnad Ahmad 18968 (book's ref)", g:"Hasan", w:"b"},
+  {a:"اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ، عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ", t:"O Allah, Creator of the heavens and the earth, Knower of the seen and unseen, Lord and Sovereign of all things: I testify that none is worthy of worship but You. I seek refuge in You from the evil of my soul, the evil of Shaytan and his shirk, and from bringing evil upon myself or dragging it to any Muslim.", n:1, s:"Sunan Abi Dawud 5067", g:"Sahih (al-Albani)", w:"b", long:true},
+  {a:"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ", t:"O Ever-Living, O Sustainer, by Your mercy I seek relief. Rectify all my affairs and do not leave me to myself for the blink of an eye.", n:1, s:"Sunan an-Nasa'i al-Kubra 10405 (book's ref)", g:"Hasan / Sahih (al-Mundhiri, al-Albani)", w:"b"},
+  {a:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ... رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ... (evening: أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ...)", t:"We have entered the morning and dominion belongs to Allah; praise be to Allah; none is worthy of worship but Allah alone, no partner. My Lord, I ask You for the good of this day and the good after it, and I seek refuge from the evil of this day and after it; from laziness, the misery of old age, the punishment of the Fire and the punishment of the grave.", n:1, s:"Sahih Muslim 2723 (also Hisn al-Muslim 77)", g:"Sahih", w:"b", long:true},
+  {a:"اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ", t:"O Allah, by You we enter the morning, by You we enter the evening, by You we live, by You we die, and to You is the resurrection.", n:1, s:"Sunan Abi Dawud 5068", g:"Sahih (al-Albani)", w:"m"},
+  {a:"اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ", t:"O Allah, by You we enter the evening, by You we enter the morning, by You we live, by You we die, and to You is the final return.", n:1, s:"Sunan Ibn Majah 3868", g:"Sahih (al-Albani)", w:"e"},
+  {a:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ", t:"Glory and praise to Allah by the number of His creation, by His pleasure, by the weight of His Throne, and by the extent of His words.", n:3, s:"Sahih Muslim 2726", g:"Sahih", w:"m"},
+  {a:"أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِينَ", t:"We have entered the morning upon the natural disposition of Islam, the word of sincerity, the religion of our Prophet Muhammad (SAW), and the way of our father Ibrahim, who was upright, a Muslim, and not of the polytheists.", n:1, s:"Musnad Ahmad 15360 (book's ref)", g:"Sahih (al-Albani, Sahih al-Jami)", w:"m", long:true},
+  {a:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ", t:"Allah is sufficient for me; none is worthy of worship but Him. Upon Him I rely, and He is the Lord of the Mighty Throne.", n:7, s:"Sunan Abi Dawud 5081 (mawqoof from Abu Darda)", g:"See note (mawqoof; chain discussed)", w:"b"},
+  {a:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", t:"I seek refuge in the Perfect Words of Allah from the evil of what He created.", n:3, s:"Sahih Muslim 2708, 2709 (also Hisn al-Muslim 97)", g:"Sahih", w:"e"},
+  {a:"آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ... (البقرة ٢٨٥-٢٨٦)", t:"The Messenger believes in what was revealed to him from his Lord, and so do the believers... (ends) You are our Protector, so grant us victory over the disbelieving people. (Al-Baqarah 285-286)", n:1, s:"Sahih al-Bukhari 4008", g:"Sahih", w:"e"}
+];
+
+const C1 = 2 * Math.PI * 34;
+const C2 = 2 * Math.PI * 60;
+const CT = 2 * Math.PI * 110;
+
+class Component extends DCLogic {
+  state = {
+    tab: 'today', session: null, idx: 0, count: 0, done: false,
+    tasbeeh: 0, target: 33, transOn: null, size: 'm',
+    reminders: true, audio: false, layout: null, modeOverride: null,
+    streak: 12
+  };
+
+  get mode() {
+    const p = this.props.timeOfDay;
+    if (this.state.modeOverride) return this.state.modeOverride;
+    if (p === 'Morning') return 'morning';
+    if (p === 'Evening') return 'evening';
+    const h = new Date().getHours();
+    return (h >= 3 && h < 15) ? 'morning' : 'evening';
+  }
+  get layout() {
+    return this.state.layout || (this.props.readerLayout === 'Full-bleed' ? 'B' : 'A');
+  }
+  get accent() {
+    const base = this.props.accent || '#c67139';
+    if (base === '#c67139' && !this.dark) return 'var(--color-accent)';
+    return this.dark && base === '#c67139' ? 'var(--color-accent-400)' : base;
+  }
+  get dark() { return this.state.session ? this.state.session === 'evening' : this.mode === 'evening'; }
+  get list() {
+    const m = this.state.session || this.mode;
+    return DATA.filter(d => d.w === 'b' || d.w === (m === 'morning' ? 'm' : 'e'));
+  }
+  get transOn() { return this.state.transOn === null ? (this.props.showTranslation !== false) : this.state.transOn; }
+
+  pill(on) { return on ? { bg: this.accent, fg: this.dark ? 'var(--color-accent-900)' : 'var(--color-accent-100)' } : { bg: 'transparent', fg: 'inherit' }; }
+  sw(on) { return { bg: on ? this.accent : 'var(--sc-line)', knob: on ? 'translateX(18px)' : 'translateX(0)' }; }
+
+  open(s) { this.setState({ session: s, idx: 0, count: 0, done: false }); }
+  tapCard = () => {
+    const l = this.list, d = l[this.state.idx];
+    if (!d) return;
+    const c = this.state.count + 1;
+    if (navigator.vibrate) { try { navigator.vibrate(10); } catch (e) {} }
+    if (c >= d.n) {
+      if (this.state.idx + 1 >= l.length) this.setState({ done: true, session: null, count: 0, streak: this.state.streak });
+      else this.setState({ idx: this.state.idx + 1, count: 0 });
+    } else this.setState({ count: c });
+  };
+
+  renderVals() {
+    const dark = this.dark, accent = this.accent, m = this.state.session || this.mode;
+    const list = this.list, d = list[this.state.idx] || list[0];
+    const arabic = d.a || (m === 'morning' ? d.aS : d.aM);
+    const base = { s: 25, m: 29, l: 34 }[this.state.size];
+    const size = d.long ? base - 5 : base;
+    const inReader = !!this.state.session;
+    const heat = [];
+    for (let i = 0; i < 70; i++) {
+      const v = (i * 37 % 11) / 10;
+      const lvl = i > 66 ? (i > 68 ? 0 : 1) : v > .82 ? 0 : v > .55 ? 1 : 2;
+      heat.push({ bg: lvl === 0 ? 'var(--sc-line)' : lvl === 1 ? 'var(--color-accent-300)' : accent });
+    }
+    const hour = new Date().getHours();
+
+    return {
+      bg: dark ? 'var(--color-accent-2-900)' : 'var(--color-bg)',
+      fg: dark ? 'var(--color-accent-2-100)' : 'var(--color-text)',
+      cardBg: dark ? 'var(--color-accent-2-800)' : 'var(--color-neutral-100)',
+      tint: dark ? 'var(--color-accent-2-800)' : 'var(--color-neutral-200)',
+      line: dark ? 'var(--color-accent-2-700)' : 'var(--color-neutral-300)',
+      accent, onAccent: dark ? 'var(--color-accent-900)' : 'var(--color-accent-100)', sage: dark ? 'var(--color-accent-2-400)' : 'var(--color-accent-2)', isDark: dark,
+
+      isToday: !inReader && !this.state.done && this.state.tab === 'today',
+      isTasbeeh: !inReader && !this.state.done && this.state.tab === 'tasbeeh',
+      isProgress: !inReader && !this.state.done && this.state.tab === 'progress',
+      isSettings: !inReader && !this.state.done && this.state.tab === 'settings',
+      inReader, isDone: this.state.done, showTabs: !inReader && !this.state.done,
+      isLayoutA: this.layout === 'A', isLayoutB: this.layout === 'B',
+
+      dateLine: new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
+      greeting: m === 'morning' ? 'Begin the day with Him.' : 'Close the day with Him.',
+      primaryKicker: m === 'morning' ? 'Between Fajr and sunrise' : "Between ʿAsr and Maghrib",
+      primaryTitle: m === 'morning' ? 'Morning adhkār' : 'Evening adhkār',
+      primaryArabicName: m === 'morning' ? 'أذكار الصباح' : 'أذكار المساء',
+      primarySub: list.length + ' remembrances · about 6 minutes',
+      primaryPct: '0%', primaryCount: '0 of ' + list.length,
+      primaryCta: 'Start',
+      secondaryKicker: m === 'morning' ? 'Later today' : 'Completed this morning',
+      secondaryTitle: m === 'morning' ? 'Evening adhkār' : 'Morning adhkār',
+      secondaryArabicName: m === 'morning' ? 'أذكار المساء' : 'أذكار الصباح',
+      secondarySub: m === 'morning' ? 'Opens after ʿAsr' : 'All 18 · 06:24',
+      secondaryKickerB: '',
+      streak: this.state.streak, longest: 41, startedOn: 'March 2026',
+      weekDone: 11,
+      reminderLine: hour < 12 ? 'Your evening nudge is set for 17:40, just after ʿAsr.' : 'Your morning nudge is set for 06:10, just after Fajr.',
+
+      tasbeeh: this.state.tasbeeh,
+      tasbeehTargetLabel: this.state.target ? 'of ' + this.state.target : 'counting',
+      tasbeehOffset: this.state.target ? CT * (1 - Math.min(1, this.state.tasbeeh / this.state.target)) : CT,
+      tasbeehSets: Math.floor(this.state.tasbeeh / (this.state.target || 33)) + ' sets today',
+      t33: this.pill(this.state.target === 33), t99: this.pill(this.state.target === 99),
+      t100: this.pill(this.state.target === 100), tFree: this.pill(this.state.target === 0),
+
+      heat, morningPct: '86%', eveningPct: '71%',
+      splitNote: 'Evenings slip most on Thursdays. A nudge 20 minutes earlier tends to fix it.',
+
+      readerTitle: m === 'morning' ? 'Morning adhkār' : 'Evening adhkār',
+      posLabel: (this.state.idx + 1) + ' / ' + list.length,
+      beads: list.map((_, i) => ({
+        color: i < this.state.idx ? accent : i === this.state.idx ? (dark ? 'var(--color-accent-2-100)' : 'var(--color-text)') : 'var(--sc-line)',
+        scale: i === this.state.idx ? 'scale(1.6)' : 'scale(1)'
+      })),
+      arabic, translation: d.t, sourceLine: d.s + ' · ' + d.g + ' · ' + d.n + '×',
+      arabicSize: size + 'px', arabicSizeB: (size + 1) + 'px',
+      showTranslation: this.transOn,
+      count: this.state.count, target: d.n,
+      ringOffset: C1 * (1 - this.state.count / d.n),
+      ringOffsetB: C2 * (1 - this.state.count / d.n),
+      doneLine: 'That is ' + list.length + ' remembrances, recorded for today.',
+      doneStreakNote: 'longest was 41',
+
+      nav: {
+        today: this.state.tab === 'today' ? 1 : .4,
+        tasbeeh: this.state.tab === 'tasbeeh' ? 1 : .4,
+        progress: this.state.tab === 'progress' ? 1 : .4,
+        settings: this.state.tab === 'settings' ? 1 : .4
+      },
+      swTrans: this.sw(this.transOn), swRem: this.sw(this.state.reminders), swAudio: this.sw(this.state.audio),
+      sizeS: this.pill(this.state.size === 's'), sizeM: this.pill(this.state.size === 'm'), sizeL: this.pill(this.state.size === 'l'),
+      tabA: this.layout === 'A' ? { bg: 'var(--color-accent)', fg: 'var(--color-accent-100)' } : { bg: 'transparent', fg: 'var(--color-neutral-700)' },
+      tabB: this.layout === 'B' ? { bg: 'var(--color-accent)', fg: 'var(--color-accent-100)' } : { bg: 'transparent', fg: 'var(--color-neutral-700)' },
+      modeSwitchLabel: dark ? 'Switch to morning' : 'Switch to evening',
+
+      openPrimary: () => this.open(m),
+      openSecondary: () => this.open(m === 'morning' ? 'evening' : 'morning'),
+      closeReader: () => this.setState({ session: null, done: false, count: 0, idx: 0, tab: 'today' }),
+      tapCard: this.tapCard,
+      next: (e) => { e.stopPropagation(); this.setState({ idx: Math.min(list.length - 1, this.state.idx + 1), count: 0 }); },
+      prev: (e) => { e.stopPropagation(); this.setState({ idx: Math.max(0, this.state.idx - 1), count: 0 }); },
+      goToday: () => this.setState({ tab: 'today' }), goTasbeeh: () => this.setState({ tab: 'tasbeeh' }),
+      goProgress: () => this.setState({ tab: 'progress' }), goSettings: () => this.setState({ tab: 'settings' }),
+      tapTasbeeh: () => this.setState({ tasbeeh: this.state.tasbeeh + 1 }),
+      resetTasbeeh: () => this.setState({ tasbeeh: 0 }),
+      setT33: () => this.setState({ target: 33, tasbeeh: 0 }), setT99: () => this.setState({ target: 99, tasbeeh: 0 }),
+      setT100: () => this.setState({ target: 100, tasbeeh: 0 }), setTFree: () => this.setState({ target: 0, tasbeeh: 0 }),
+      toggleTranslation: () => this.setState({ transOn: !this.transOn }),
+      toggleReminders: () => this.setState({ reminders: !this.state.reminders }),
+      toggleAudio: () => this.setState({ audio: !this.state.audio }),
+      setSizeS: () => this.setState({ size: 's' }), setSizeM: () => this.setState({ size: 'm' }), setSizeL: () => this.setState({ size: 'l' }),
+      setLayoutA: () => this.setState({ layout: 'A' }), setLayoutB: () => this.setState({ layout: 'B' }),
+      toggleMode: () => this.setState({ modeOverride: dark ? 'morning' : 'evening', session: null, done: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
